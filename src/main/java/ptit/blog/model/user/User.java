@@ -3,6 +3,8 @@ package ptit.blog.model.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import ptit.blog.model.Blog;
+import ptit.blog.model.Comment;
 import ptit.blog.util.CustomDateSerializer;
 
 import javax.persistence.*;
@@ -32,9 +34,9 @@ public class User {
     @Column(name = "Email", length = 40, nullable = false, unique = true)
     private String email;
 
-//    @Lob
-//    @Column(name = "Avatar")
-//    private String avatar;
+    @Lob
+    @Column(name = "Avatar")
+    private String avatar;
 
     @Column(name = "IsActive", nullable = false)
     private Boolean isActive;
@@ -59,6 +61,18 @@ public class User {
     @ToString.Exclude
     @JsonIgnore
     private Set<Group> groups;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<Blog> blogs;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<Comment> comments;
 
     @JsonSerialize(using = CustomDateSerializer.class)
     @Column(name = "CreatedAt", nullable = false)
