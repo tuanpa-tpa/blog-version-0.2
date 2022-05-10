@@ -1,5 +1,6 @@
 package ptit.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +27,12 @@ public class Category {
     @Column(name = "CategoryName", columnDefinition = "TEXT")
     private String categoryName;
 
+    @Column(name = "Icon", columnDefinition = "VARCHAR(50)")
+    @JsonIgnore
+    private String icon;
+
     @ManyToMany
+    @JsonIgnore
     @JoinTable(name = "tbl_blog_category",
             joinColumns = {@JoinColumn(name = "CategoryId", referencedColumnName = "CategoryId")},
             inverseJoinColumns = {@JoinColumn(name = "BlogId", referencedColumnName = "BlogId")})

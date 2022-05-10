@@ -3,15 +3,18 @@ package ptit.blog.dto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ptit.blog.dto.entity.BlogListDto;
 import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.response.user.CreateUserResp;
+import ptit.blog.model.Blog;
 import ptit.blog.model.user.User;
+import ptit.blog.repository.UserRepo;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class Mapper {
-
+    private final UserRepo userRepo;
 
     public static CreateUserResp responseUserFromModel(User user){
         if (user == null) {
@@ -37,4 +40,17 @@ public class Mapper {
     }
 
 
+    public static BlogListDto responseBlogListDtoFromModel(Blog blog) {
+        return BlogListDto.builder()
+                .id(blog.getBlogId())
+                .img(blog.getImg())
+                .title(blog.getTitle())
+                .blogPosted(blog.getCreatedAt())
+                .tags(blog.getCategories())
+                .blogText(blog.getContent())
+                .comment((long) blog.getComments().size())
+                .avatar(blog.getUser().getAvatar())
+                .username(blog.getUser().getUsername())
+                .build();
+    }
 }
