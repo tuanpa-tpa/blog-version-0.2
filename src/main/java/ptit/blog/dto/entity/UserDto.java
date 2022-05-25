@@ -20,7 +20,7 @@ public class UserDto {
     private Long userId;
     private String email;
     private String username;
-    private Set<Group> groups;
+//    private Set<Group> groups;
     private Boolean isActive;
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date createdAt;

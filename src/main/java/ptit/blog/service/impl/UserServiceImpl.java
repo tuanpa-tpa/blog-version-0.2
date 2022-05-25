@@ -19,6 +19,7 @@ import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.request.user.ChangePasswordReq;
 import ptit.blog.dto.request.user.CreateReq;
 import ptit.blog.dto.request.user.ResetPasswordReq;
+import ptit.blog.dto.request.user.SearchUser;
 import ptit.blog.dto.response.user.CreateUserResp;
 import ptit.blog.dto.response.user.ResetPasswordResp;
 import ptit.blog.exception.user.UserBadReqException;
@@ -35,6 +36,7 @@ import ptit.blog.response.ResponseStatus;
 import ptit.blog.service.UserService;
 import ptit.blog.utilservice.PaginationCustom;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -269,6 +271,52 @@ public class UserServiceImpl implements UserService {
             userRepo.saveAndFlush(user);
             return true;
         }
+    }
+
+    @Override
+    public ResponseObject<ResponsePagination<Object>> search(SearchUser req) {
+        ResponseObject<ResponsePagination<Object>> res = new ResponseObject<>(true,
+                ResponseStatus.DO_SERVICE_SUCCESSFUL);
+        // if page or size is null then set page = 0 and size = 20
+        int page = (req.getPage() == null) ? 0 : req.getPage();
+        int size = (req.getSize() == null) ? 20 : req.getSize();
+        // get data from request and check if its data is null
+        String contains = ((req.getContains() == null) || (req.getContains().equals(""))) ? null
+                : req.getContains().trim();
+        // if there are more than one space between each word then replace with one
+        // space only
+        if (contains != null) {
+            String[] words = contains.split("\\s+");
+            contains = String.join(" ", words);
+        }
+        // if sort array is null then set defaut value is organizationId, asc
+        String[] sort = ((req.getSort() == null) || (req.getSort().length == 0)) ? new String[] { "userId,asc" }
+                : req.getSort();
+        // Convert fromDate and toDate String to Date
+        SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        Date fromDate = null, toDate = null;
+        try {
+            // Create Pagable
+            Pageable pageable = this.paginationCustom.createPaginationCustom(page, size, sort);
+            // set default value for fromDate and toDate
+            if (req.getFromDate() != null && !req.getFromDate().equals(""))
+                fromDate = sf.parse(req.getFromDate() + " 00:00:00");
+            if (req.getToDate() != null && !req.getToDate().equals(""))
+                toDate = sf.parse(req.getToDate() + " 23:59:59");
+            // Get list staffModel from search method in repo
+            Page<User> pageUser = null;
+                pageUser = userRepo.search(contains, fromDate, toDate, pageable);
+            res.setData(ResponsePagination.builder()
+                    .data(pageUser.stream().map(Mapper::responseUserDtoFromModel).collect(Collectors.toList()))
+                    .size(pageUser.getSize())
+                    .currentPage(pageUser.getNumber())
+                    .totalPages(pageUser.getTotalPages())
+                    .totalItems(pageUser.getTotalElements())
+                    .build());
+        } catch (Exception e) {
+            throw new UserException(e.getMessage());
+        }
+        return res;
     }
 
     private String getCurrentUser() {

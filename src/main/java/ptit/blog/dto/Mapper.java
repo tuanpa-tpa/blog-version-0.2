@@ -32,7 +32,7 @@ public class Mapper {
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .groups(user.getGroups())
+//                .groups(user.getGroups())
                 .isActive(user.getIsActive())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())

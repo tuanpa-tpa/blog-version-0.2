@@ -16,11 +16,13 @@ import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.request.user.ChangePasswordReq;
 import ptit.blog.dto.request.user.CreateReq;
 import ptit.blog.dto.request.user.ResetPasswordReq;
+import ptit.blog.dto.request.user.SearchUser;
 import ptit.blog.dto.response.user.ResetPasswordResp;
 import ptit.blog.dto.response.user.UserInfo;
 import ptit.blog.model.CustomUserPrincipal;
 import ptit.blog.repository.UserRepo;
 import ptit.blog.response.ResponseObject;
+import ptit.blog.response.ResponsePagination;
 import ptit.blog.service.UserService;
 import ptit.blog.response.ResponseStatus;
 
@@ -122,6 +124,13 @@ public class UserController {
     public ResponseEntity<?> verifyResetPassword(@RequestBody ResetPasswordReq req) {
         log.info("Controller: verify reset password");
         ResponseObject<ResetPasswordResp> res = userService.resetPassword(req);
+        return ResponseEntity.ok(res);
+    }
+
+    @PostMapping("/list")
+    public ResponseEntity<?> getAllUser(@RequestBody SearchUser searchUser) {
+        log.info("Controller: get All User");
+        ResponseObject<ResponsePagination<Object>> res = userService.search(searchUser);
         return ResponseEntity.ok(res);
     }
 }

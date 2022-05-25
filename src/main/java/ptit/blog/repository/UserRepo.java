@@ -1,10 +1,15 @@
 package ptit.blog.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ptit.blog.model.user.User;
+
+import java.util.Date;
+import java.util.UUID;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
@@ -19,4 +24,12 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     @Query("select u from User u where u.resetPasswordCode = :resetPasswordCode")
     User findByResetPasswordCode(@Param("resetPasswordCode") String resetPasswordCode);
+
+    @Query("select u from User u WHERE (:contains is null or (u.username LIKE %:contains% OR u.email LIKE %:contains% ))" +
+            "AND (:fromDate is null or :fromDate <= u.updatedAt)" +
+            "AND (:toDate is null or :toDate >= u.updatedAt)")
+    Page<User> search(@Param("contains") String contains,
+                      @Param("fromDate") Date fromDate,
+                      @Param("toDate") Date toDate,
+                      Pageable pageable);
 }

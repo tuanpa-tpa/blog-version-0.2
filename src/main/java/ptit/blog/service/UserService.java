@@ -4,6 +4,7 @@ import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.request.user.ChangePasswordReq;
 import ptit.blog.dto.request.user.CreateReq;
 import ptit.blog.dto.request.user.ResetPasswordReq;
+import ptit.blog.dto.request.user.SearchUser;
 import ptit.blog.dto.response.user.ResetPasswordResp;
 import ptit.blog.response.ResponseObject;
 import ptit.blog.response.ResponsePagination;
@@ -25,4 +26,6 @@ public interface UserService {
     ResponseObject<ResetPasswordResp> resetPassword(ResetPasswordReq req);
 
     boolean verify(String verificationCode);
+
+    ResponseObject<ResponsePagination<Object>> search(SearchUser req);
 }
