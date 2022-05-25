@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ptit.blog.dto.entity.BlogListDto;
 import ptit.blog.dto.entity.UserDto;
+import ptit.blog.dto.response.blog.BlogDetailsResp;
 import ptit.blog.dto.response.user.CreateUserResp;
 import ptit.blog.model.Blog;
 import ptit.blog.model.user.User;
@@ -49,6 +50,19 @@ public class Mapper {
                 .tags(blog.getCategories())
                 .blogText(blog.getContent())
                 .comment((long) blog.getComments().size())
+                .avatar(blog.getUser().getAvatar())
+                .username(blog.getUser().getUsername())
+                .build();
+    }
+    public static BlogDetailsResp responseBlogDetailsFromModel(Blog blog) {
+        return BlogDetailsResp.builder()
+                .img(blog.getImg())
+                .title(blog.getTitle())
+                .postedAt(blog.getCreatedAt())
+                .tags(blog.getCategories())
+                .content(blog.getContent())
+                .comments((long) blog.getComments().size())
+                .bookmarked(0L)
                 .avatar(blog.getUser().getAvatar())
                 .username(blog.getUser().getUsername())
                 .build();
