@@ -28,10 +28,10 @@ public class Blog {
     @Column(name = "Title")
     private String title;
 
-    @Column(name = "img", columnDefinition = "VARCHAR(50)")
+    @Column(name = "img", columnDefinition = "VARCHAR(50) CHARACTER SET utf8")
     private String img;
 
-    @Column(name = "Content", columnDefinition = "TEXT")
+    @Column(name = "Content", columnDefinition = "TEXT CHARACTER SET utf8")
     private String content;
 
     @ManyToOne

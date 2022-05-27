@@ -24,7 +24,7 @@ public class Category {
     @Column(name = "CategoryId")
     private Long categoryId;
 
-    @Column(name = "CategoryName", columnDefinition = "TEXT")
+    @Column(name = "CategoryName", columnDefinition = "TEXT CHARACTER SET utf8")
     private String categoryName;
 
     @Column(name = "Icon", columnDefinition = "VARCHAR(50)")

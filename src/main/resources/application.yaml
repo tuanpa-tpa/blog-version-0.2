@@ -1,11 +1,17 @@
 spring:
+  servlet:
+    multipart:
+      enabled: 'true'
+      max-request-size: 215MB
+      file-size-threshold: 2KB
+      max-file-size: 200MB
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
     url: jdbc:mysql://localhost:3306/blogv2
     username: root
-    password: tuanpa28
+    password: tuan
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,7 +20,7 @@ spring:
     properties:
       hibernate:
         #          dialect: org.hibernate.dialect.MySQL57InnoDBDialect
-        show_sql: true
+        show_sql: false
         format_sql: false
 #  servlet:
 #    multipart:
@@ -69,3 +75,5 @@ logging:
       hibernate : ERROR
 debug: false
 
+file:
+  upload-dir: C:\Users\pat\Workspace\PTIT\Project\blog-frontend\src\assets\images\banner

@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ptit.blog.dto.entity.BlogListDto;
+import ptit.blog.dto.entity.CommentDto;
 import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.response.blog.BlogDetailsResp;
 import ptit.blog.dto.response.user.CreateUserResp;
 import ptit.blog.model.Blog;
+import ptit.blog.model.Comment;
 import ptit.blog.model.user.User;
 import ptit.blog.repository.UserRepo;
 
@@ -61,10 +63,19 @@ public class Mapper {
                 .postedAt(blog.getCreatedAt())
                 .tags(blog.getCategories())
                 .content(blog.getContent())
-                .comments((long) blog.getComments().size())
+                .comments(blog.getComments() == null? 0 : (long) blog.getComments().size())
                 .bookmarked(0L)
                 .avatar(blog.getUser().getAvatar())
                 .username(blog.getUser().getUsername())
+                .build();
+    }
+
+    public static CommentDto responseCommentDtoFromModel(Comment comment) {
+        return CommentDto.builder()
+                .avatar(comment.getUser().getAvatar())
+                .username(comment.getUser().getUsername())
+                .commentText(comment.getContent())
+                .commentedAt(comment.getCreatedAt())
                 .build();
     }
 }

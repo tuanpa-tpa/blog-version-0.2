@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ptit.blog.model.Category;
+import ptit.blog.model.Comment;
 
 import java.util.Date;
 import java.util.Set;

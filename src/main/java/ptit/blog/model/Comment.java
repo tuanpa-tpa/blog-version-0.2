@@ -23,7 +23,7 @@ public class Comment {
     @Column(name = "CommentId")
     private Long commentId;
 
-    @Column(name = "Content", columnDefinition = "TEXT")
+    @Column(name = "Content", columnDefinition = "TEXT CHARACTER SET utf8")
     private String content;
 
     @JsonSerialize(using = CustomDateSerializer.class)

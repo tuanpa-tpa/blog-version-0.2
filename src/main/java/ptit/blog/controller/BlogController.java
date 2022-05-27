@@ -2,16 +2,24 @@ package ptit.blog.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ptit.blog.dto.entity.BlogListDto;
+import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.request.blog.SearchBlog;
+import ptit.blog.dto.request.blog.UpdateBlog;
 import ptit.blog.dto.response.blog.BlogDetailsResp;
+import ptit.blog.model.CustomUserPrincipal;
 import ptit.blog.response.ResponseObject;
 import ptit.blog.response.ResponsePagination;
 import ptit.blog.service.BlogService;
+import ptit.blog.service.UserService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,6 +29,7 @@ import java.util.List;
 public class BlogController {
 
     private final BlogService blogService;
+    private final UserService userService;
 
     @PostMapping("/list")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
@@ -40,9 +49,38 @@ public class BlogController {
 
     @GetMapping("/details/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<?> postBlog(@PathVariable Long id) {
-        log.info("Controller: post blog");
+    public ResponseEntity<?> getDetails(@PathVariable Long id) {
+        log.info("Controller: get details blog");
         ResponseObject<BlogDetailsResp> res = this.blogService.getDetails(id);
+        return ResponseEntity.ok(res);
+    }
+
+    @PostMapping(path = "/post",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> postBlog(@ModelAttribute @RequestBody BlogPostReq req) throws IOException {
+        UsernamePasswordAuthenticationToken user
+                = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDto userDto = this.userService.findByUsername(((CustomUserPrincipal) user.getPrincipal()).getUsername());
+        ResponseObject<BlogDetailsResp> res = this.blogService.postBlog(userDto, req);
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/update")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> updateBlog(@RequestBody UpdateBlog req) {
+        log.info("Controller: update blog");
+        ResponseObject<BlogDetailsResp> res = this.blogService.update(req);
+        return ResponseEntity.ok(res);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteBlog(@PathVariable Long id) {
+        log.info("Controller: get details blog");
+        ResponseObject<Boolean> res = this.blogService.deleteBlog(id);
         return ResponseEntity.ok(res);
     }
 }
