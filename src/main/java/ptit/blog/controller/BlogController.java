@@ -12,6 +12,7 @@ import ptit.blog.dto.entity.BlogListDto;
 import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.request.blog.SearchBlog;
 import ptit.blog.dto.request.blog.UpdateBlog;
+import ptit.blog.dto.response.blog.BlogCreateResp;
 import ptit.blog.dto.response.blog.BlogDetailsResp;
 import ptit.blog.model.CustomUserPrincipal;
 import ptit.blog.response.ResponseObject;
@@ -65,7 +66,7 @@ public class BlogController {
         UsernamePasswordAuthenticationToken user
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDto userDto = this.userService.findByUsername(((CustomUserPrincipal) user.getPrincipal()).getUsername());
-        ResponseObject<BlogDetailsResp> res = this.blogService.postBlog(userDto, req);
+        ResponseObject<BlogCreateResp> res = this.blogService.postBlog(userDto, req);
         return ResponseEntity.ok(res);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ptit.blog.dto.entity.BlogListDto;
 import ptit.blog.dto.entity.CommentDto;
 import ptit.blog.dto.entity.UserDto;
+import ptit.blog.dto.response.blog.BlogCreateResp;
 import ptit.blog.dto.response.blog.BlogDetailsResp;
 import ptit.blog.dto.response.user.CreateUserResp;
 import ptit.blog.model.Blog;
@@ -56,6 +57,19 @@ public class Mapper {
                 .username(blog.getUser().getUsername())
                 .build();
     }
+
+    public static BlogCreateResp responseBlogCreateRespFromModel(Blog blog) {
+        return BlogCreateResp.builder()
+                .featuredImage(blog.getImg())
+                .blogTitle(blog.getTitle())
+                .postedAt(blog.getCreatedAt())
+                .blogCategories(blog.getCategories())
+                .blogText(blog.getContent())
+                .avatar(blog.getUser().getAvatar())
+                .username(blog.getUser().getUsername())
+                .build();
+    }
+
     public static BlogDetailsResp responseBlogDetailsFromModel(Blog blog) {
         return BlogDetailsResp.builder()
                 .img(blog.getImg())

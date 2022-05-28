@@ -15,6 +15,7 @@ import ptit.blog.dto.entity.BlogListDto;
 import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.request.blog.SearchBlog;
 import ptit.blog.dto.request.blog.UpdateBlog;
+import ptit.blog.dto.response.blog.BlogCreateResp;
 import ptit.blog.dto.response.blog.BlogDetailsResp;
 import ptit.blog.exception.FileStorageException;
 import ptit.blog.exception.blog.user.BlogException;
@@ -136,8 +137,8 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public ResponseObject<BlogDetailsResp> postBlog(UserDto userDto, BlogPostReq req) throws IOException {
-        ResponseObject<BlogDetailsResp> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
+    public ResponseObject<BlogCreateResp> postBlog(UserDto userDto, BlogPostReq req) throws IOException {
+        ResponseObject<BlogCreateResp> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
         String img = "";
         try {
             Files.copy(req.getImg().getInputStream(), this.root.resolve(Objects.requireNonNull(req.getImg().getOriginalFilename())));
@@ -162,7 +163,7 @@ public class BlogServiceImpl implements BlogService {
                     .updatedAt(new Date())
                     .createdAt(new Date())
                     .build());
-            res.setData(Mapper.responseBlogDetailsFromModel(blog));
+            res.setData(Mapper.responseBlogCreateRespFromModel(blog));
         } catch (Exception e) {
             throw new BlogException("loi post");
         }
