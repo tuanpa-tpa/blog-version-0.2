@@ -1,4 +1,4 @@
-package ptit.blog.exception.blog.user;
+package ptit.blog.exception.blog;
 
 public class UserReqEmptyException extends RuntimeException {
     public UserReqEmptyException() {

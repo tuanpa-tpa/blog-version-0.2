@@ -8,8 +8,10 @@ import ptit.blog.dto.entity.CommentDto;
 import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.response.blog.BlogCreateResp;
 import ptit.blog.dto.response.blog.BlogDetailsResp;
+import ptit.blog.dto.response.category.CategoryListDto;
 import ptit.blog.dto.response.user.CreateUserResp;
 import ptit.blog.model.Blog;
+import ptit.blog.model.Category;
 import ptit.blog.model.Comment;
 import ptit.blog.model.user.User;
 import ptit.blog.repository.UserRepo;
@@ -36,6 +38,7 @@ public class Mapper {
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .username(user.getUsername())
+                .avatar(user.getAvatar())
 //                .groups(user.getGroups())
                 .isActive(user.getIsActive())
                 .createdAt(user.getCreatedAt())
@@ -90,6 +93,13 @@ public class Mapper {
                 .username(comment.getUser().getUsername())
                 .commentText(comment.getContent())
                 .commentedAt(comment.getCreatedAt())
+                .build();
+    }
+
+    public static CategoryListDto responseCategoryListFromModel(Category category) {
+        return CategoryListDto.builder()
+                .category(category.getCategoryName())
+                .icon(category.getIcon())
                 .build();
     }
 }

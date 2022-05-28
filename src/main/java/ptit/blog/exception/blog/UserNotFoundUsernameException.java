@@ -1,4 +1,4 @@
-package ptit.blog.exception.blog.user;
+package ptit.blog.exception.blog;
 
 public class UserNotFoundUsernameException extends RuntimeException {
     public UserNotFoundUsernameException(String username) {

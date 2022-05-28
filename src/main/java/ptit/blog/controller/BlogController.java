@@ -79,8 +79,9 @@ public class BlogController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> deleteBlog(@PathVariable Long id) {
-        log.info("Controller: get details blog");
+        log.info("Controller: delete blog");
         ResponseObject<Boolean> res = this.blogService.deleteBlog(id);
         return ResponseEntity.ok(res);
     }

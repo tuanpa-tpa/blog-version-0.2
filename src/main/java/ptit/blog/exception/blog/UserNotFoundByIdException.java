@@ -1,4 +1,4 @@
-package ptit.blog.exception.blog.user;
+package ptit.blog.exception.blog;
 
 import java.util.UUID;
 

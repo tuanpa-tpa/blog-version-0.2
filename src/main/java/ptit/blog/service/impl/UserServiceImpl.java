@@ -100,6 +100,7 @@ public class UserServiceImpl implements UserService {
                             .email(req.getEmail())
                             .createdAt(new Date())
                             .updatedAt(new Date())
+                            .avatar("assets/images/portrait/small/avatar-s-7.jpg")
                             .roles(roles)
                             .verificationCode(verificationCode)
                             .isActive(false)

@@ -22,6 +22,7 @@ public class UserDto {
     private String username;
 //    private Set<Group> groups;
     private Boolean isActive;
+    private String avatar;
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date createdAt;
     @JsonSerialize(using = CustomDateSerializer.class)

@@ -1,4 +1,4 @@
-package ptit.blog.exception.blog.user;
+package ptit.blog.exception.blog;
 
 public class UserNotFoundByEmailException extends RuntimeException {
     public UserNotFoundByEmailException(String email) {

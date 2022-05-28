@@ -38,13 +38,13 @@ public class Blog {
     @JoinColumn(name = "UserId", referencedColumnName = "UserId")
     private User user;
 
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Comment> comments;
 
-    @ManyToMany(mappedBy = "blogs", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "blogs", cascade = CascadeType.REFRESH)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

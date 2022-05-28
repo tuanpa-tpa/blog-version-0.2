@@ -1,4 +1,4 @@
-package ptit.blog.exception.blog.user;
+package ptit.blog.exception.blog;
 
 public class BlogException extends RuntimeException {
     public BlogException(String message) {

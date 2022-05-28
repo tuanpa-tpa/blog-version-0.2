@@ -6,9 +6,6 @@ import net.bytebuddy.utility.RandomString;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-import ptit.blog.config.file.FileStorageProperties;
 import ptit.blog.controller.BlogPostReq;
 import ptit.blog.dto.Mapper;
 import ptit.blog.dto.entity.BlogListDto;
@@ -17,8 +14,7 @@ import ptit.blog.dto.request.blog.SearchBlog;
 import ptit.blog.dto.request.blog.UpdateBlog;
 import ptit.blog.dto.response.blog.BlogCreateResp;
 import ptit.blog.dto.response.blog.BlogDetailsResp;
-import ptit.blog.exception.FileStorageException;
-import ptit.blog.exception.blog.user.BlogException;
+import ptit.blog.exception.blog.BlogException;
 import ptit.blog.exception.user.UserException;
 import ptit.blog.model.Blog;
 import ptit.blog.model.Category;
@@ -33,11 +29,9 @@ import ptit.blog.service.BlogService;
 import ptit.blog.utilservice.PaginationCustom;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -122,7 +116,10 @@ public class BlogServiceImpl implements BlogService {
         ResponseObject<Boolean> res = new ResponseObject<>(true,
                 ResponseStatus.DO_SERVICE_SUCCESSFUL);
         try {
-            blogRepo.deleteById(id);
+            Blog blog = blogRepo.findById(id)
+                    .orElseThrow(() -> new BlogException("not found by id"));
+            blogRepo.delete(blog);
+            log.info("abc");
             res.setData(true);
         } catch (Exception e) {
             res.setData(false);

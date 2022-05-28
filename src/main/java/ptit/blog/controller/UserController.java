@@ -79,6 +79,7 @@ public class UserController {
                 .email(userDto.getEmail())
                 .username(userDto.getUsername())
                 .role(role)
+                .avatar(userDto.getAvatar())
                 .build();
         res.setData(userInfo);
         return ResponseEntity.ok(res);

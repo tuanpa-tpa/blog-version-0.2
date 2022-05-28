@@ -23,7 +23,7 @@ public class UserInfo {
     private String username;
     @ApiModelProperty(value = "Role", name = "Quyền", example = "Mô tả các quyền (authority)")
     private ArrayList<GrantedAuthority> role;
-//    @ApiModelProperty(value = "avatar", name = "Ảnh chân dung", example = "Ảnh")
-//    private String avatar;
+    @ApiModelProperty(value = "avatar", name = "Ảnh chân dung", example = "avatar")
+    private String avatar;
 
 }
