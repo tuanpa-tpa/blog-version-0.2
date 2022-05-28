@@ -138,16 +138,24 @@ public class BlogServiceImpl implements BlogService {
         ResponseObject<BlogCreateResp> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
         String img = "";
         try {
-            Files.copy(req.getImg().getInputStream(), this.root.resolve(Objects.requireNonNull(req.getImg().getOriginalFilename())));
-            img = req.getImg().getOriginalFilename();
+            if (req.getImg() != null) {
+                img = req.getImg().getOriginalFilename();
+                Files.copy(req.getImg().getInputStream(), this.root.resolve(Objects.requireNonNull(req.getImg().getOriginalFilename())));
+            } else {
+                img = "02.jpg";
+            }
         } catch (Exception e) {
             img = "01.jpg";
             log.info(e.getMessage());
         }
         try {
             Set<Category> categories = new HashSet<>();
-            for (Long id: req.getCategoryId()) {
-                categories.add(categoryRepo.findById(id).get());
+            for (String name: req.getCategories()) {
+                try {
+                    categories.add(categoryRepo.findByCategoryName(name));
+                } catch (Exception e) {
+                    log.info(e.getMessage());
+                }
             }
             User user = userRepo.findByUsername(userDto.getUsername());
             String randomImgPath = RandomString.make(5);

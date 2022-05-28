@@ -99,7 +99,6 @@ public class Mapper {
     public static CategoryListDto responseCategoryListFromModel(Category category) {
         return CategoryListDto.builder()
                 .category(category.getCategoryName())
-                .icon(category.getIcon())
                 .build();
     }
 }
