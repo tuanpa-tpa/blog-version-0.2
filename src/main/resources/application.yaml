@@ -1,10 +1,14 @@
 spring:
   servlet:
     multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
       enabled: 'true'
-      max-request-size: 215MB
       file-size-threshold: 2KB
-      max-file-size: 200MB
+  http:
+    multipart:
+      enabled: 'false'
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -43,7 +47,7 @@ spring:
           timeout: 5000
   jackson:
     serialization:
-      FAIL_ON_EMPTY_BEANS: false
+      fail-on-empty-beans: false
 #  mvc:
 #    servlet:
 #      path: /api
@@ -74,6 +78,6 @@ logging:
           autoconfigure: INFO
       hibernate : ERROR
 debug: false
-
-file:
-  upload-dir: C:\Users\pat\Workspace\PTIT\Project\blog-frontend\src\assets\images\banner
+#
+#file:
+#  upload-dir: C:\Users\pat\Workspace\PTIT\Project\blog-frontend\src\assets\images\banner
