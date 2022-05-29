@@ -156,7 +156,7 @@ public class BlogServiceImpl implements BlogService {
             }
             Blog blog = blogRepo.findById(req.getId()).orElseThrow(() -> new BlogException("not found"));
             blog.setCategories(categories);
-            blog.setContent(req.getContent());
+            blog.setContent(req.getContent().substring(3, req.getContent().length()-4));
             blog.setTitle(req.getTitle());
             if (check) blog.setImg("assets/images/slider/"+img);
             blogRepo.save(blog);
@@ -200,7 +200,7 @@ public class BlogServiceImpl implements BlogService {
                     .img("assets/images/slider/"+img)
                     .categories(categories)
                     .title(req.getTitle())
-                    .content(req.getContent())
+                    .content(req.getContent().substring(3, req.getContent().length()-4))
                     .updatedAt(new Date())
                     .createdAt(new Date())
                     .build());
