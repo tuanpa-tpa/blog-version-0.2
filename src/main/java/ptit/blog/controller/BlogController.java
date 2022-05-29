@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ptit.blog.dto.entity.BlogListDto;
 import ptit.blog.dto.entity.UserDto;
+import ptit.blog.dto.request.blog.BlogPostReq;
 import ptit.blog.dto.request.blog.SearchBlog;
 import ptit.blog.dto.request.blog.UpdateBlog;
 import ptit.blog.dto.response.blog.BlogCreateResp;
@@ -70,9 +71,13 @@ public class BlogController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/update")
+    @PostMapping(path = "/update",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> updateBlog(@RequestBody UpdateBlog req) {
+    public ResponseEntity<?> updateBlog(@ModelAttribute @RequestBody UpdateBlog req) {
         log.info("Controller: update blog");
         ResponseObject<BlogDetailsResp> res = this.blogService.update(req);
         return ResponseEntity.ok(res);

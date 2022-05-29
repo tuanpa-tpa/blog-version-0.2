@@ -1,4 +1,4 @@
-package ptit.blog.controller;
+package ptit.blog.dto.request.blog;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

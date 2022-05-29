@@ -1,6 +1,6 @@
 package ptit.blog.service;
 
-import ptit.blog.controller.BlogPostReq;
+import ptit.blog.dto.request.blog.BlogPostReq;
 import ptit.blog.dto.entity.BlogListDto;
 import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.request.blog.SearchBlog;

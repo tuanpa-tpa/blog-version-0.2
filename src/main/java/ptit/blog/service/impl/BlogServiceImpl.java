@@ -6,7 +6,7 @@ import net.bytebuddy.utility.RandomString;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ptit.blog.controller.BlogPostReq;
+import ptit.blog.dto.request.blog.BlogPostReq;
 import ptit.blog.dto.Mapper;
 import ptit.blog.dto.entity.BlogListDto;
 import ptit.blog.dto.entity.UserDto;
@@ -130,12 +130,47 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public ResponseObject<BlogDetailsResp> update(UpdateBlog req) {
-        return null;
+        ResponseObject<BlogDetailsResp> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
+        String img = "";
+        boolean check = false;
+        try {
+            if (req.getImg() != null) {
+                img = req.getImg().getOriginalFilename();
+                Files.copy(req.getImg().getInputStream(), this.root.resolve(Objects.requireNonNull(req.getImg().getOriginalFilename())));
+                check = true;
+            } else {
+                img = "02.jpg";
+            }
+        } catch (Exception e) {
+            img = "01.jpg";
+            log.info(e.getMessage());
+        }
+        try {
+            Set<Category> categories = new HashSet<>();
+            for (String name: req.getCategories()) {
+                try {
+                    categories.add(categoryRepo.findByCategoryName(name));
+                } catch (Exception e) {
+                    log.info(e.getMessage());
+                }
+            }
+            Blog blog = blogRepo.findById(req.getId()).orElseThrow(() -> new BlogException("not found"));
+            blog.setCategories(categories);
+            blog.setContent(req.getContent());
+            blog.setTitle(req.getTitle());
+            if (check) blog.setImg("assets/images/slider/"+img);
+            blogRepo.save(blog);
+            res.setData(Mapper.responseBlogDetailsFromModel(blog));
+        } catch (Exception e) {
+            throw new BlogException("loi update");
+        }
+        return res;
     }
 
     @Override
     public ResponseObject<BlogCreateResp> postBlog(UserDto userDto, BlogPostReq req) throws IOException {
         ResponseObject<BlogCreateResp> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
+//        req.setImg(null);
         String img = "";
         try {
             if (req.getImg() != null) {
@@ -157,6 +192,7 @@ public class BlogServiceImpl implements BlogService {
                     log.info(e.getMessage());
                 }
             }
+
             User user = userRepo.findByUsername(userDto.getUsername());
             String randomImgPath = RandomString.make(5);
             Blog blog = blogRepo.save(Blog.builder()
