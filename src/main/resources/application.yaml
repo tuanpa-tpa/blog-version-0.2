@@ -26,47 +26,32 @@ spring:
 #        dialect: org.hibernate.dialect.MySQL5Dialect
         show_sql: false
         format_sql: false
-#  servlet:
-#    multipart:
-#      max-file-size: 50MB
-#      max-request-size: 50MB
-#      enabled: 'true'
-#      file-size-threshold: 2KB
-#  mail:
-#    protocol: smtp
-#    host: smtp.gmail.com
-#    port: '587'
-#    username: hunga1k15tv@gmail.com
-#    password: gyarrwtufnnnmnaa
+  mail:
+#    protocol: smtp.gmail.com
+#    port: 587
+    username: tuanpa.tpa@gmail.com
+#    password: nmiumslrjhdirksp
 #    properties:
 #      mail:
 #        smtp:
 #          auth: true
 #          starttls:
 #            enable: true
-#          timeout: 5000
   jackson:
     serialization:
       fail-on-empty-beans: false
-#  mvc:
-#    servlet:
-#      path: /api
 jwt:
   secret: tuanpa
 my:
   secret:
     password: ${random.value}
-#file:
-#  upload-dir: /opt/wildfly/uploads
-#server:
-#  error:
-#    include-message: always
-#    include-binding-errors: always
-#  ip: tuanpa
-#  artifcate: blog
-#
-#template:
-#  email: classpath:/templates
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+  blogServer: http://localhost:8080
+template:
+  email: classpath:/templates
 logging:
   level:
     root : INFO

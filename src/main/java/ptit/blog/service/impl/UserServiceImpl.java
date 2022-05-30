@@ -3,6 +3,7 @@ package ptit.blog.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ptit.blog.dto.EmailRegistrationDto;
 import ptit.blog.dto.Mapper;
 import ptit.blog.dto.entity.UserDto;
 import ptit.blog.dto.request.user.ChangePasswordReq;
@@ -33,8 +35,10 @@ import ptit.blog.repository.UserRepo;
 import ptit.blog.response.ResponseObject;
 import ptit.blog.response.ResponsePagination;
 import ptit.blog.response.ResponseStatus;
+import ptit.blog.service.SendEmailService;
 import ptit.blog.service.UserService;
 import ptit.blog.utilservice.PaginationCustom;
+import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,6 +53,9 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final RoleRepo roleRepo;
     private final PaginationCustom paginationCustom;
+    private final SendEmailService sendEmailService;
+    @Value("${spring.mail.username}")
+    private String emailFrom;
 //    @Value("${spring.mail.username}")
 //    private String emailFrom;
 //    private final SendEmailService sendEmailService;
@@ -109,22 +116,22 @@ public class UserServiceImpl implements UserService {
             res.setData(Mapper.responseUserDtoFromModel(user));
 
             //Send mail
-//            EmailRegistrationDto emailRequest = EmailRegistrationDto.builder()
-//                    .from(emailFrom)
-//                    .to(user.getEmail())
-//                    .subject("Vui lòng xác thực tài khoản !").build();
-//            EmailRegistrationDto.ContentEmail contentEmail = EmailRegistrationDto.ContentEmail.builder()
-//                    .name(user.getUsername())
-//                    .email(user.getEmail())
-//                    .role(StringUtils.join(roles.stream().map(Role::getRoleName).collect(Collectors.toList()), ", "))
-//                    .verificationCode(verificationCode)
-//                    .build();
-//
-//            long start = System.currentTimeMillis();
-//
-//            sendEmailService.sendEmailSelfRegistration(emailRequest, contentEmail, user.getUserId());
-//
-//            log.info("User:: elapsed time: " + (System.currentTimeMillis() - start));
+            EmailRegistrationDto emailRequest = EmailRegistrationDto.builder()
+                    .from(emailFrom)
+                    .to(user.getEmail())
+                    .subject("Vui lòng xác thực tài khoản !").build();
+            EmailRegistrationDto.ContentEmail contentEmail = EmailRegistrationDto.ContentEmail.builder()
+                    .name(user.getUsername())
+                    .email(user.getEmail())
+                    .role(StringUtils.join(roles.stream().map(Role::getRoleName).collect(Collectors.toList()), ", "))
+                    .verificationCode(verificationCode)
+                    .build();
+
+            long start = System.currentTimeMillis();
+
+            sendEmailService.sendEmailSelfRegistration(emailRequest, contentEmail, user.getUserId());
+
+            log.info("User:: elapsed time: " + (System.currentTimeMillis() - start));
         } catch (DataAccessException ex) {
             throw new UserDataAccessException(ex.getMessage());
         }
@@ -217,22 +224,22 @@ public class UserServiceImpl implements UserService {
         user.setResetPasswordCode(resetPasswordCode);
         user = this.userRepo.save(user);
         res.setData(user.getResetPasswordCode());
-//        EmailRegistrationDto emailRequest = EmailRegistrationDto.builder()
-//                .from(emailFrom)
-//                .to(user.getEmail())
-//                .subject("Xác thực đặt lại mật khẩu !").build();
-//        EmailRegistrationDto.ContentEmailResetPassword contentEmail = EmailRegistrationDto.ContentEmailResetPassword.builder()
-//                .name(user.getUsername())
-//                .email(user.getEmail())
-//                .role(StringUtils.join(user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toList()), ", "))
-//                .resetPasswordCode(user.getResetPasswordCode())
-//                .build();
-//
-//        long start = System.currentTimeMillis();
-//
-//        sendEmailService.sendMailResetPassword(emailRequest, contentEmail, user.getUserId());
-//
-//        log.info("User:: elapsed time: " + (System.currentTimeMillis() - start));
+        EmailRegistrationDto emailRequest = EmailRegistrationDto.builder()
+                .from(emailFrom)
+                .to(user.getEmail())
+                .subject("Xác thực đặt lại mật khẩu !").build();
+        EmailRegistrationDto.ContentEmailResetPassword contentEmail = EmailRegistrationDto.ContentEmailResetPassword.builder()
+                .name(user.getUsername())
+                .email(user.getEmail())
+                .role(StringUtils.join(user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toList()), ", "))
+                .resetPasswordCode(user.getResetPasswordCode())
+                .build();
+
+        long start = System.currentTimeMillis();
+
+        sendEmailService.sendMailResetPassword(emailRequest, contentEmail, user.getUserId());
+
+        log.info("User:: elapsed time: " + (System.currentTimeMillis() - start));
         return res;
     }
 
