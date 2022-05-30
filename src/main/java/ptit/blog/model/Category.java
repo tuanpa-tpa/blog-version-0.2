@@ -2,10 +2,9 @@ package ptit.blog.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import ptit.blog.model.user.Role;
+import ptit.blog.model.user.User;
 import ptit.blog.util.CustomDateSerializer;
 
 import javax.persistence.*;
@@ -31,11 +30,10 @@ public class Category {
     @JsonIgnore
     private String icon;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JsonIgnore
-    @JoinTable(name = "tbl_blog_category",
-            joinColumns = {@JoinColumn(name = "CategoryId", referencedColumnName = "CategoryId")},
-            inverseJoinColumns = {@JoinColumn(name = "BlogId", referencedColumnName = "BlogId")})
     private Set<Blog> blogs;
 
     @JsonSerialize(using = CustomDateSerializer.class)

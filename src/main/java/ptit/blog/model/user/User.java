@@ -18,7 +18,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@PersistenceContext
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +45,8 @@ public class User {
 
     @Column(name = "Reset_password_code")
     private String resetPasswordCode;
+
+
     @ManyToMany(fetch = FetchType.EAGER)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

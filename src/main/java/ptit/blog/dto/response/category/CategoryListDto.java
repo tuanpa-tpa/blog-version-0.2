@@ -17,4 +17,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CategoryListDto {
     private String category;
+    private String icon;
 }

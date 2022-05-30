@@ -111,6 +111,7 @@ public class BlogServiceImpl implements BlogService {
         ResponseObject<BlogDetailsResp> res = new ResponseObject<>(true,
                 ResponseStatus.DO_SERVICE_SUCCESSFUL);
         Blog blog = blogRepo.findById(id).orElseThrow(() -> new RuntimeException("not found blog id"));
+        log.info(blog.getCategories().size()+"");
         res.setData(Mapper.responseBlogDetailsFromModel(blog));
         return res;
     }
@@ -200,7 +201,6 @@ public class BlogServiceImpl implements BlogService {
             }
 
             User user = userRepo.findByUsername(userDto.getUsername());
-            String randomImgPath = RandomString.make(5);
             Blog blog = blogRepo.save(Blog.builder()
                     .user(user)
                     .img("assets/images/slider/"+img)

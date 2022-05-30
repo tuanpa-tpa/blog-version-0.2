@@ -17,7 +17,6 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "tbl_blog")
-@PersistenceContext
 public class Blog {
     @Id
 //    @GeneratedValue(generator = "UUID")
@@ -46,10 +45,14 @@ public class Blog {
     @ToString.Exclude
     private Set<Comment> comments;
 
-    @ManyToMany(mappedBy = "blogs", cascade = {CascadeType.PERSIST})
-    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonIgnore
+    @JoinTable(name = "tbl_blog_category", joinColumns = {
+            @JoinColumn(name = "BlogId", referencedColumnName = "BlogId")},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "CategoryId", referencedColumnName = "CategoryId")})
     private Set<Category> categories;
 
     @JsonSerialize(using = CustomDateSerializer.class)

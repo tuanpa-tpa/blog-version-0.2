@@ -18,7 +18,6 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "tbl_comment")
-@PersistenceContext
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
