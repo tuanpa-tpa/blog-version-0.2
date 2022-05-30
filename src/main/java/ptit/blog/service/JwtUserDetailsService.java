@@ -57,17 +57,17 @@ public class JwtUserDetailsService extends User implements UserDetailsService {
         });
 
 //        Group có nhiều role
-        if (user.getGroups() != null) {
-            user.getGroups().forEach(group -> {
-                group.getRoles().forEach(role -> {
-                    authorities.add(new SimpleGrantedAuthority(Constant.ROLE_PREFIX + role.getRoleName()));
-//                Role co nhieu permission
-                    role.getPermissions().forEach(permission -> {
-                        authorities.add(new SimpleGrantedAuthority(permission.getActionCode()));
-                    });
-                });
-            });
-        }
+//        if (user.getGroups() != null) {
+//            user.getGroups().forEach(group -> {
+//                group.getRoles().forEach(role -> {
+//                    authorities.add(new SimpleGrantedAuthority(Constant.ROLE_PREFIX + role.getRoleName()));
+////                Role co nhieu permission
+//                    role.getPermissions().forEach(permission -> {
+//                        authorities.add(new SimpleGrantedAuthority(permission.getActionCode()));
+//                    });
+//                });
+//            });
+//        }
 //        Remove duplicates in arraylist
         Set<GrantedAuthority> set = new HashSet<>(authorities);
         authorities.clear();

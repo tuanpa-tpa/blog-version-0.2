@@ -7,7 +7,7 @@ spring:
       file-size-threshold: 2KB
   http:
     multipart:
-      enabled: 'false'
+      enabled: false
 
   mvc:
     pathmatch:
@@ -23,7 +23,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        #          dialect: org.hibernate.dialect.MySQL57InnoDBDialect
+        dialect: org.hibernate.dialect.MySQL5Dialect
         show_sql: false
         format_sql: false
 #  servlet:
@@ -32,19 +32,19 @@ spring:
 #      max-request-size: 50MB
 #      enabled: 'true'
 #      file-size-threshold: 2KB
-  mail:
-    protocol: smtp
-    host: smtp.gmail.com
-    port: '587'
-    username: hunga1k15tv@gmail.com
-    password: gyarrwtufnnnmnaa
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-          timeout: 5000
+#  mail:
+#    protocol: smtp
+#    host: smtp.gmail.com
+#    port: '587'
+#    username: hunga1k15tv@gmail.com
+#    password: gyarrwtufnnnmnaa
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#          timeout: 5000
   jackson:
     serialization:
       fail-on-empty-beans: false

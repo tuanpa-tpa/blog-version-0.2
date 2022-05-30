@@ -37,11 +37,6 @@ public class Role {
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Group> groups;
-
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private Set<User> users;
 
     @JsonSerialize(using = CustomDateSerializer.class)

@@ -6,6 +6,7 @@ import net.bytebuddy.utility.RandomString;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ptit.blog.dto.request.blog.BlogPostReq;
 import ptit.blog.dto.Mapper;
 import ptit.blog.dto.entity.BlogListDto;
@@ -18,9 +19,11 @@ import ptit.blog.exception.blog.BlogException;
 import ptit.blog.exception.user.UserException;
 import ptit.blog.model.Blog;
 import ptit.blog.model.Category;
+import ptit.blog.model.Comment;
 import ptit.blog.model.user.User;
 import ptit.blog.repository.BlogRepo;
 import ptit.blog.repository.CategoryRepo;
+import ptit.blog.repository.CommentRepo;
 import ptit.blog.repository.UserRepo;
 import ptit.blog.response.ResponseObject;
 import ptit.blog.response.ResponsePagination;
@@ -39,7 +42,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class BlogServiceImpl implements BlogService {
+    private final CommentRepo commentRepo;
     private final CategoryRepo categoryRepo;
     private final UserRepo userRepo;
     private final BlogRepo blogRepo;
@@ -50,7 +55,6 @@ public class BlogServiceImpl implements BlogService {
     public ResponseObject<List<BlogListDto>> getList() {
         ResponseObject<List<BlogListDto>> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
         List<Blog> blogs = blogRepo.findAll();
-        log.info(blogs.get(0).getUser().getUsername());
         List<BlogListDto> result = blogs.stream().map(Mapper::responseBlogListDtoFromModel).collect(Collectors.toList());
         res.setData(result);
         return res;
@@ -112,14 +116,16 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    @Transactional
     public ResponseObject<Boolean> deleteBlog(Long id) {
         ResponseObject<Boolean> res = new ResponseObject<>(true,
                 ResponseStatus.DO_SERVICE_SUCCESSFUL);
         try {
             Blog blog = blogRepo.findById(id)
                     .orElseThrow(() -> new BlogException("not found by id"));
-            blogRepo.delete(blog);
-            log.info("abc");
+            this.blogRepo.deleteById(blog.getBlogId());
+            Set<Comment> list = blog.getComments();
+            list.forEach((c) -> commentRepo.deleteById(c.getCommentId()));
             res.setData(true);
         } catch (Exception e) {
             res.setData(false);
@@ -156,7 +162,7 @@ public class BlogServiceImpl implements BlogService {
             }
             Blog blog = blogRepo.findById(req.getId()).orElseThrow(() -> new BlogException("not found"));
             blog.setCategories(categories);
-            blog.setContent(req.getContent().substring(3, req.getContent().length()-4));
+            blog.setContent(req.getContent());
             blog.setTitle(req.getTitle());
             if (check) blog.setImg("assets/images/slider/"+img);
             blogRepo.save(blog);
@@ -200,7 +206,7 @@ public class BlogServiceImpl implements BlogService {
                     .img("assets/images/slider/"+img)
                     .categories(categories)
                     .title(req.getTitle())
-                    .content(req.getContent().substring(3, req.getContent().length()-4))
+                    .content(req.getContent())
                     .updatedAt(new Date())
                     .createdAt(new Date())
                     .build());

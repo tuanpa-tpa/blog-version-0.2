@@ -46,10 +46,18 @@ public class CommentController {
     }
 
     @GetMapping("/list/{id}")
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> getAllComment(@PathVariable Long id) {
         log.info("Controller: get All comment post");
         ResponseObject<List<CommentDto>> res = this.commentService.getAllComment(id);
+        return ResponseEntity.ok(res);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
+        log.info("Controller: delete comment by id");
+        ResponseObject<Boolean> res = this.commentService.delete(id);
         return ResponseEntity.ok(res);
     }
 

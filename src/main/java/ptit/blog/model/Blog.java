@@ -8,6 +8,7 @@ import ptit.blog.util.CustomDateSerializer;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -16,13 +17,14 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "tbl_blog")
+@PersistenceContext
 public class Blog {
     @Id
 //    @GeneratedValue(generator = "UUID")
 //    @Type(type="uuid-char")
 //    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BlogId", nullable = false)
+    @Column(name = "BlogId")
     private Long blogId;
 
     @Column(name = "Title")
@@ -38,13 +40,13 @@ public class Blog {
     @JoinColumn(name = "UserId", referencedColumnName = "UserId")
     private User user;
 
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Comment> comments;
 
-    @ManyToMany(mappedBy = "blogs", cascade = CascadeType.REFRESH)
+    @ManyToMany(mappedBy = "blogs", cascade = {CascadeType.PERSIST})
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

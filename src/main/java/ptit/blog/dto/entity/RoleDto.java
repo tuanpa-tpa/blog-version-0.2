@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ptit.blog.model.user.Group;
 import ptit.blog.model.user.Permission;
 import ptit.blog.util.CustomDateSerializer;
 
@@ -20,7 +19,6 @@ public class RoleDto {
     private Long roleId;
     private String roleName;
     private Set<Permission> permissions;
-    private Set<Group> groups;
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date createdAt;
     @JsonSerialize(using = CustomDateSerializer.class)

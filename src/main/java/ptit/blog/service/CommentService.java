@@ -11,4 +11,6 @@ public interface CommentService {
     ResponseObject<CommentDto> postComment(UserDto userDto, Long id, CommentCreateReq req);
 
     ResponseObject<List<CommentDto>> getAllComment(Long id);
+
+    ResponseObject<Boolean> delete(Long id);
 }

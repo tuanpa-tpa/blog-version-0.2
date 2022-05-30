@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
         User user = userRepo.findByUsername(userDto.getUsername());
         Comment comment = commentRepo.save(
                 Comment.builder()
-                .blog(blog)
+//                .blog(blog)
                 .user(user)
                 .content(req.getComment())
                 .createdAt(new Date())
@@ -60,6 +60,14 @@ public class CommentServiceImpl implements CommentService {
         Blog blog = blogRepo.findById(id).orElseThrow(() -> new RuntimeException("not found blog"));
         Set<Comment> comments = blog.getComments();
         res.setData(comments.stream().map(Mapper::responseCommentDtoFromModel).collect(Collectors.toList()));
+        return res;
+    }
+
+    @Override
+    public ResponseObject<Boolean> delete(Long id) {
+        ResponseObject<Boolean> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
+        commentRepo.deleteById(id);
+        res.setData(true);
         return res;
     }
 }

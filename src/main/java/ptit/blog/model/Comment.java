@@ -1,5 +1,6 @@
 package ptit.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "tbl_comment")
+@PersistenceContext
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +28,9 @@ public class Comment {
     @Column(name = "Content", columnDefinition = "TEXT CHARACTER SET utf8")
     private String content;
 
-    @JsonSerialize(using = CustomDateSerializer.class)
-    @Column(name = "CreatedAt", nullable = false)
-    private Date createdAt;
-
-    @ManyToOne
-    @JoinColumn(name = "BlogId", referencedColumnName = "BlogId")
-    private Blog blog;
+//    @ManyToOne(cascade = CascadeType.PERSIST)
+//    @JoinColumn(name = "BlogId", referencedColumnName = "BlogId")
+//    private Blog blog;
 
     @ManyToOne
     @JoinColumn(name = "UserId", referencedColumnName = "UserId")
@@ -41,4 +39,8 @@ public class Comment {
     @JsonSerialize(using = CustomDateSerializer.class)
     @Column(name = "UpdatedAt")
     private Date updatedAt;
+
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @Column(name = "CreatedAt", nullable = false)
+    private Date createdAt;
 }

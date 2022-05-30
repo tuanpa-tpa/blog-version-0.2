@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ptit.blog.model.user.Group;
 import ptit.blog.util.CustomDateSerializer;
 
 import java.util.Date;
