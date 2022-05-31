@@ -34,7 +34,7 @@ public class BlogController {
     private final UserService userService;
 
     @PostMapping("/list")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER','SUPER_ADMIN')")
     public ResponseEntity<?> getList(@RequestBody SearchBlog req) {
         log.info("Controller: blog list");
         ResponseObject<ResponsePagination<Object>> res = this.blogService.search(req);
@@ -42,7 +42,7 @@ public class BlogController {
     }
 
     @GetMapping("/listtest")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER','SUPER_ADMIN')")
     public ResponseEntity<?> getLista() {
         log.info("Controller: blog list");
         ResponseObject<List<BlogListDto>> res = this.blogService.getList();
@@ -50,7 +50,7 @@ public class BlogController {
     }
 
     @GetMapping("/details/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER','SUPER_ADMIN')")
     public ResponseEntity<?> getDetails(@PathVariable Long id) {
         log.info("Controller: get details blog");
         ResponseObject<BlogDetailsResp> res = this.blogService.getDetails(id);
@@ -62,7 +62,7 @@ public class BlogController {
                     MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     public ResponseEntity<?> postBlog(@ModelAttribute @RequestBody BlogPostReq req) throws IOException {
         UsernamePasswordAuthenticationToken user
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
@@ -76,7 +76,7 @@ public class BlogController {
                     MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     public ResponseEntity<?> updateBlog(@ModelAttribute @RequestBody UpdateBlog req) {
         log.info("Controller: update blog");
         ResponseObject<BlogDetailsResp> res = this.blogService.update(req);
@@ -84,7 +84,7 @@ public class BlogController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     public ResponseEntity<?> deleteBlog(@PathVariable Long id) {
         log.info("Controller: delete blog");
         ResponseObject<Boolean> res = this.blogService.deleteBlog(id);

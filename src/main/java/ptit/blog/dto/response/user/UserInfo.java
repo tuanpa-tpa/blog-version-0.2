@@ -17,13 +17,9 @@ import java.util.UUID;
 @Builder
 @ApiModel(subTypes = {UserInfo.class})
 public class UserInfo {
-    @ApiModelProperty(value = "Email", name = "email", example = "hunga1k15tv1@gmail.com")
     private String email;
-    @ApiModelProperty(value = "Tài khoản ",  name = "email", example = "nvhung6" )
     private String username;
-    @ApiModelProperty(value = "Role", name = "Quyền", example = "Mô tả các quyền (authority)")
     private ArrayList<GrantedAuthority> role;
-    @ApiModelProperty(value = "avatar", name = "Ảnh chân dung", example = "avatar")
     private String avatar;
 
 }

@@ -1,5 +1,6 @@
 package ptit.blog.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import ptit.blog.util.CustomDateSerializer;
@@ -26,6 +27,7 @@ public class Role {
     private String roleName;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     @EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode
     @ToString.Exclude // Không sử dụng trong toString()
     @JoinTable(name = "tbl_role_permission", joinColumns = {
@@ -37,6 +39,7 @@ public class Role {
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonIgnore
     private Set<User> users;
 
     @JsonSerialize(using = CustomDateSerializer.class)

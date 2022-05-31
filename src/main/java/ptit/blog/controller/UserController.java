@@ -28,6 +28,7 @@ import ptit.blog.response.ResponseStatus;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -41,7 +42,7 @@ public class UserController {
 
     @ApiOperation(value = "Thay đổi mật khẩu tài khoản", response = ResponseEntity.class, authorizations = {@Authorization(value = "JWT")})
     @PostMapping(path = "/change-password")
-    @PreAuthorize("hasAuthority('UPDATE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> updatePassword(@RequestBody ChangePasswordReq req) {
         UsernamePasswordAuthenticationToken user
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
@@ -100,7 +101,7 @@ public class UserController {
 
     @ApiOperation(value = "Xác thực tài khoản người dùng", response = ResponseEntity.class)
     @GetMapping(path = "/verify")
-    //@PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN', 'USER')")
+    //@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> verify(@RequestParam("code") String verificationCode) {
         log.info("Controller: Xác thực tài khoản người dùng");
         boolean verified = userService.verify(verificationCode);
@@ -113,7 +114,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "Lấy code rest password", response = ResponseEntity.class)
-    @GetMapping("/reset_password_code/{email}")
+    @PostMapping("/reset_password_code/{email}")
     public ResponseEntity<?> getResetPasswordCode(@PathVariable String email) {
         log.info("Controller: Lấy code rest password");
         ResponseObject<String> res = userService.getResetPasswordCode(email);
@@ -129,9 +130,27 @@ public class UserController {
     }
 
     @PostMapping("/list")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     public ResponseEntity<?> getAllUser(@RequestBody SearchUser searchUser) {
         log.info("Controller: get All User");
         ResponseObject<ResponsePagination<Object>> res = userService.search(searchUser);
+        return ResponseEntity.ok(res);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+        log.info("Controller: delete User");
+        log.info(id);
+        ResponseObject<Boolean> res = userService.delete(Long.parseLong(id));
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    public ResponseEntity<?> finUser(@PathVariable Long id) {
+        log.info("Controller: find User");
+        ResponseObject<UserDto> res = userService.findUser(id);
         return ResponseEntity.ok(res);
     }
 }

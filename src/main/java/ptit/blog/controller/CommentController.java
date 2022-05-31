@@ -35,7 +35,7 @@ public class CommentController {
     private final UserService userService;
 
     @PostMapping("/post/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER', 'SUPER_ADMIN')")
     public ResponseEntity<?> postComment(@PathVariable Long id, @RequestBody CommentCreateReq req) {
         log.info("Controller: post comment");
         UsernamePasswordAuthenticationToken user
@@ -46,7 +46,7 @@ public class CommentController {
     }
 
     @GetMapping("/list/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'SUPER_ADMIN')")
     public ResponseEntity<?> getAllComment(@PathVariable Long id) {
         log.info("Controller: get All comment post");
         ResponseObject<List<CommentDto>> res = this.commentService.getAllComment(id);
@@ -54,7 +54,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'SUPER_ADMIN')")
     public ResponseEntity<?> deleteComment(@PathVariable Long id) {
         log.info("Controller: delete comment by id");
         ResponseObject<Boolean> res = this.commentService.delete(id);

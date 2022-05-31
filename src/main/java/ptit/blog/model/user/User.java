@@ -33,6 +33,9 @@ public class User {
     @Column(name = "Email", length = 40, nullable = false, unique = true)
     private String email;
 
+    @Column(name = "Name", columnDefinition = "VARCHAR(50) CHARACTER SET utf8")
+    private String name;
+
     @Lob
     @Column(name = "Avatar")
     private String avatar;
@@ -57,12 +60,6 @@ public class User {
                     @JoinColumn(name = "RoleId", referencedColumnName = "RoleId")})
     private Set<Role> roles;
 
-//    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @EqualsAndHashCode.Exclude
-//    @ToString.Exclude
-//    @JsonIgnore
-//    private Set<Group> groups;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -74,6 +71,11 @@ public class User {
     @ToString.Exclude
     @JsonIgnore
     private Set<Comment> comments;
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonIgnore
+//    @EqualsAndHashCode.Exclude
+//    @ToString.Exclude
+//    private Set<Comment> comments;
 
     @JsonSerialize(using = CustomDateSerializer.class)
     @Column(name = "CreatedAt", nullable = false)

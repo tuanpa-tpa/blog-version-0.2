@@ -32,7 +32,7 @@ public class RoleController {
 
     @ApiOperation(value = "Thêm role", response = ResponseEntity.class, authorizations = {@Authorization(value = "JWT")})
     @PostMapping(path = "/add")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     public ResponseEntity<?> addRole(@RequestBody ChangeRoleReq req) {
 //        ResponseObject<UserDto> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
         UsernamePasswordAuthenticationToken user
@@ -50,7 +50,7 @@ public class RoleController {
 
     @ApiOperation(value = "Xoá role", response = ResponseEntity.class, authorizations = {@Authorization(value = "JWT")})
     @DeleteMapping(path = "/delete")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     public ResponseEntity<?> deleteRole(@RequestBody ChangeRoleReq req) {
         UsernamePasswordAuthenticationToken user
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
@@ -66,7 +66,7 @@ public class RoleController {
 
     @ApiOperation(value = "Cập nhật role", response = ResponseEntity.class, authorizations = {@Authorization(value = "JWT")})
     @PutMapping(path = "/update")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     public ResponseEntity<?> updateRole(@RequestBody ChangeRoleReq req) {
         UsernamePasswordAuthenticationToken user
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
@@ -82,7 +82,7 @@ public class RoleController {
 
     @ApiOperation(value = "Lấy ra tất cả role của username", response = ResponseEntity.class, authorizations = {@Authorization(value = "JWT")})
     @GetMapping(path = "/{username}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<?> getRolesUsername(@PathVariable String username) {
         ResponseObject<List<String>> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
         List<String> roles = roleService.findRolesUsername(username);

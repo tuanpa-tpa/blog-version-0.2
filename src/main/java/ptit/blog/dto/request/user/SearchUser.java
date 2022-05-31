@@ -22,6 +22,7 @@ public class SearchUser {
     private Integer size;
     private String[] sort;
     private String contains;
+    private Boolean isActive;
     private String fromDate;
     private String toDate;
 }

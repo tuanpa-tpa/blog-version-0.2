@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
                             .email(req.getEmail())
                             .createdAt(new Date())
                             .updatedAt(new Date())
-                            .avatar("assets/images/portrait/small/avatar-s-7.jpg")
+                            .avatar("assets/images/portrait/small/avatar-s-1.jpg")
                             .roles(roles)
                             .verificationCode(verificationCode)
                             .isActive(false)
@@ -291,6 +291,8 @@ public class UserServiceImpl implements UserService {
         // get data from request and check if its data is null
         String contains = ((req.getContains() == null) || (req.getContains().equals(""))) ? null
                 : req.getContains().trim();
+        Boolean isActive = ((req.getIsActive() == null) || (req.getContains().equals(""))) ? null
+                : req.getIsActive();
         // if there are more than one space between each word then replace with one
         // space only
         if (contains != null) {
@@ -313,7 +315,7 @@ public class UserServiceImpl implements UserService {
                 toDate = sf.parse(req.getToDate() + " 23:59:59");
             // Get list staffModel from search method in repo
             Page<User> pageUser = null;
-                pageUser = userRepo.search(contains, fromDate, toDate, pageable);
+                pageUser = userRepo.search(contains, isActive, fromDate, toDate, pageable);
             res.setData(ResponsePagination.builder()
                     .data(pageUser.stream().map(Mapper::responseUserDtoFromModel).collect(Collectors.toList()))
                     .size(pageUser.getSize())
@@ -323,6 +325,31 @@ public class UserServiceImpl implements UserService {
                     .build());
         } catch (Exception e) {
             throw new UserException(e.getMessage());
+        }
+        return res;
+    }
+
+    @Override
+    public ResponseObject<Boolean> delete(Long id) {
+        ResponseObject<Boolean> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
+        try {
+            res.setData(false);
+            userRepo.deleteById(id);
+            res.setData(true);
+        } catch (Exception e) {
+            throw new UserException("delete error");
+        }
+        return res;
+    }
+
+    @Override
+    public ResponseObject<UserDto> findUser(Long id) {
+        ResponseObject<UserDto> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
+        try {
+            User user = userRepo.findById(id).orElseThrow(() -> new UserException("not found user"));
+            res.setData(Mapper.responseUserDtoFromModel(user));
+        } catch (Exception e) {
+            throw new UserException("not found user");
         }
         return res;
     }

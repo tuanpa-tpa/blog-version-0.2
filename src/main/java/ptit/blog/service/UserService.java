@@ -9,6 +9,8 @@ import ptit.blog.dto.response.user.ResetPasswordResp;
 import ptit.blog.response.ResponseObject;
 import ptit.blog.response.ResponsePagination;
 
+import java.util.List;
+
 public interface UserService {
     ResponseObject<UserDto> register(CreateReq req);
 //    ResponseObject<UserDto> uploadAvatar(UploadAvatarReq req);
@@ -28,4 +30,8 @@ public interface UserService {
     boolean verify(String verificationCode);
 
     ResponseObject<ResponsePagination<Object>> search(SearchUser req);
+
+    ResponseObject<Boolean> delete(Long id);
+
+    ResponseObject<UserDto> findUser(Long id);
 }
