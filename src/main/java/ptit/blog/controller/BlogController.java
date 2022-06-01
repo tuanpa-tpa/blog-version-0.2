@@ -34,7 +34,6 @@ public class BlogController {
     private final UserService userService;
 
     @PostMapping("/list")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER','SUPER_ADMIN')")
     public ResponseEntity<?> getList(@RequestBody SearchBlog req) {
         log.info("Controller: blog list");
         ResponseObject<ResponsePagination<Object>> res = this.blogService.search(req);
@@ -42,7 +41,6 @@ public class BlogController {
     }
 
     @GetMapping("/listtest")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER','SUPER_ADMIN')")
     public ResponseEntity<?> getLista() {
         log.info("Controller: blog list");
         ResponseObject<List<BlogListDto>> res = this.blogService.getList();

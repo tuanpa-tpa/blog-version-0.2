@@ -30,7 +30,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/list")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN','USER')")
     public ResponseEntity<?> getList() {
         log.info("Controller: category list");
         ResponseObject<List<CategoryListDto>> res = this.categoryService.getList();
