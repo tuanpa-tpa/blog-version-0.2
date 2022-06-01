@@ -51,7 +51,7 @@ public class Mapper {
     public static BlogListDto responseBlogListDtoFromModel(Blog blog) {
         return BlogListDto.builder()
                 .id(blog.getBlogId())
-                .img(blog.getImg())
+                .img(blog.getImg().getId())
                 .title(blog.getTitle())
                 .blogPosted(blog.getCreatedAt())
                 .tags(blog.getCategories())
@@ -64,7 +64,7 @@ public class Mapper {
 
     public static BlogCreateResp responseBlogCreateRespFromModel(Blog blog) {
         return BlogCreateResp.builder()
-                .featuredImage(blog.getImg())
+                .featuredImageId(blog.getImg().getId())
                 .blogTitle(blog.getTitle())
                 .postedAt(blog.getCreatedAt())
                 .blogCategories(blog.getCategories())
@@ -76,7 +76,7 @@ public class Mapper {
 
     public static BlogDetailsResp responseBlogDetailsFromModel(Blog blog) {
         return BlogDetailsResp.builder()
-                .img(blog.getImg())
+                .img(blog.getImg().getId())
                 .title(blog.getTitle())
                 .postedAt(blog.getCreatedAt())
                 .tags(blog.getCategories())

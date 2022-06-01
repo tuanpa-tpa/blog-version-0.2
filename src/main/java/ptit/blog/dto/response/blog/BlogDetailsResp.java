@@ -21,7 +21,7 @@ import java.util.Set;
 @Data
 @Builder
 public class BlogDetailsResp {
-    private String img;
+    private Long img;
     private String title;
     private String avatar;
     private String username;

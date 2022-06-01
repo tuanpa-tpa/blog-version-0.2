@@ -15,16 +15,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Image {
 	@Id
-	@Column(name = "id")
+	@Column(name = "ImgId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name")
+	@Column(name = "Name")
 	private String name;
 
-	@Column(name = "type")
+	@Column(name = "Type")
 	private String type;
 
-	@Column(name = "image", unique = false, nullable = false, length = 100000)
+	@Column(name = "Image", unique = false, nullable = false, length = 100000)
 	private byte[] image;
 }

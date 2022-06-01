@@ -29,8 +29,9 @@ public class Blog {
     @Column(name = "Title")
     private String title;
 
-    @Column(name = "img", columnDefinition = "VARCHAR(50) CHARACTER SET utf8")
-    private String img;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ImgId", referencedColumnName = "ImgId")
+    private Image img;
 
     @Column(name = "Content", columnDefinition = "TEXT CHARACTER SET utf8")
     private String content;
@@ -44,6 +45,7 @@ public class Blog {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Comment> comments;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @EqualsAndHashCode.Exclude

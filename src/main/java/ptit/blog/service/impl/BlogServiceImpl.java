@@ -20,15 +20,14 @@ import ptit.blog.exception.user.UserException;
 import ptit.blog.model.Blog;
 import ptit.blog.model.Category;
 import ptit.blog.model.Comment;
+import ptit.blog.model.Image;
 import ptit.blog.model.user.User;
-import ptit.blog.repository.BlogRepo;
-import ptit.blog.repository.CategoryRepo;
-import ptit.blog.repository.CommentRepo;
-import ptit.blog.repository.UserRepo;
+import ptit.blog.repository.*;
 import ptit.blog.response.ResponseObject;
 import ptit.blog.response.ResponsePagination;
 import ptit.blog.response.ResponseStatus;
 import ptit.blog.service.BlogService;
+import ptit.blog.util.ImageUtility;
 import ptit.blog.utilservice.PaginationCustom;
 
 import java.io.IOException;
@@ -49,6 +48,7 @@ public class BlogServiceImpl implements BlogService {
     private final UserRepo userRepo;
     private final BlogRepo blogRepo;
     private final PaginationCustom paginationCustom;
+    private final ImageRepository imageRepository;
     private final Path root = Paths.get("C:\\Users\\pat\\Workspace\\PTIT\\Project\\blog-frontend\\src\\assets\\images\\slider");
 
     @Override
@@ -124,9 +124,13 @@ public class BlogServiceImpl implements BlogService {
         try {
             Blog blog = blogRepo.findById(id)
                     .orElseThrow(() -> new BlogException("not found by id"));
-            this.blogRepo.deleteById(blog.getBlogId());
+
+            this.imageRepository.deleteById(blog.getImg().getId());
             Set<Comment> list = blog.getComments();
             list.forEach((c) -> commentRepo.deleteById(c.getCommentId()));
+
+            this.blogRepo.deleteById(blog.getBlogId());
+
             res.setData(true);
         } catch (Exception e) {
             res.setData(false);
@@ -138,18 +142,17 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public ResponseObject<BlogDetailsResp> update(UpdateBlog req) {
         ResponseObject<BlogDetailsResp> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
-        String img = "";
         boolean check = false;
+        Image img = null;
         try {
-            if (req.getImg() != null) {
-                img = req.getImg().getOriginalFilename();
-                Files.copy(req.getImg().getInputStream(), this.root.resolve(Objects.requireNonNull(req.getImg().getOriginalFilename())));
-                check = true;
-            } else {
-                img = "02.jpg";
-            }
+
+            img = Image.builder()
+                    .name(req.getImg().getOriginalFilename())
+                    .type(req.getImg().getContentType())
+                    .image(ImageUtility.compressImage(req.getImg().getBytes())).build();
+            imageRepository.save(img);
+            check = true;
         } catch (Exception e) {
-            img = "01.jpg";
             log.info(e.getMessage());
         }
         try {
@@ -165,7 +168,7 @@ public class BlogServiceImpl implements BlogService {
             blog.setCategories(categories);
             blog.setContent(req.getContent());
             blog.setTitle(req.getTitle());
-            if (check) blog.setImg("assets/images/slider/"+img);
+            if (check) blog.setImg(img);
             blogRepo.save(blog);
             res.setData(Mapper.responseBlogDetailsFromModel(blog));
         } catch (Exception e) {
@@ -177,17 +180,14 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public ResponseObject<BlogCreateResp> postBlog(UserDto userDto, BlogPostReq req) throws IOException {
         ResponseObject<BlogCreateResp> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
-//        req.setImg(null);
-        String img = "";
+        Image img = null;
         try {
-            if (req.getImg() != null) {
-                img = req.getImg().getOriginalFilename();
-                Files.copy(req.getImg().getInputStream(), this.root.resolve(Objects.requireNonNull(req.getImg().getOriginalFilename())));
-            } else {
-                img = "02.jpg";
-            }
+            img = Image.builder()
+                    .name(req.getImg().getOriginalFilename())
+                    .type(req.getImg().getContentType())
+                    .image(ImageUtility.compressImage(req.getImg().getBytes())).build();
+            imageRepository.save(img);
         } catch (Exception e) {
-            img = "01.jpg";
             log.info(e.getMessage());
         }
         try {
@@ -203,7 +203,7 @@ public class BlogServiceImpl implements BlogService {
             User user = userRepo.findByUsername(userDto.getUsername());
             Blog blog = blogRepo.save(Blog.builder()
                     .user(user)
-                    .img("assets/images/slider/"+img)
+                    .img(img)
                     .categories(categories)
                     .title(req.getTitle())
                     .content(req.getContent())

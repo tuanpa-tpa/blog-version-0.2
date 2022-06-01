@@ -20,7 +20,7 @@ import java.util.Set;
 @Data
 @Builder
 public class BlogCreateResp {
-    private String featuredImage;
+    private Long featuredImageId;
     private String blogTitle;
     private String avatar;
     private String username;

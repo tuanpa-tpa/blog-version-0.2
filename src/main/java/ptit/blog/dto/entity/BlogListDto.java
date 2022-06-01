@@ -16,7 +16,7 @@ import java.util.Set;
 @Builder
 public class BlogListDto {
     private Long id;
-    private String img;
+    private Long img;
     private String title;
     private String avatar;
     private String username;
