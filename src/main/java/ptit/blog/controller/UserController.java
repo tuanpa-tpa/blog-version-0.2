@@ -13,10 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ptit.blog.dto.entity.UserDto;
-import ptit.blog.dto.request.user.ChangePasswordReq;
-import ptit.blog.dto.request.user.CreateReq;
-import ptit.blog.dto.request.user.ResetPasswordReq;
-import ptit.blog.dto.request.user.SearchUser;
+import ptit.blog.dto.request.user.*;
 import ptit.blog.dto.response.user.ResetPasswordResp;
 import ptit.blog.dto.response.user.UserInfo;
 import ptit.blog.model.CustomUserPrincipal;
@@ -40,9 +37,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepo userRepo;
 
-    @ApiOperation(value = "Thay đổi mật khẩu tài khoản", response = ResponseEntity.class, authorizations = {@Authorization(value = "JWT")})
     @PostMapping(path = "/change-password")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> updatePassword(@RequestBody ChangePasswordReq req) {
         UsernamePasswordAuthenticationToken user
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
@@ -54,7 +49,6 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "Thêm mới tài khoản", response = ResponseEntity.class, authorizations = {@Authorization(value = "JWT")})
     @PostMapping(path = "/register")
     public ResponseEntity<?> register(@RequestBody CreateReq req) {
         log.info("Controller: Thêm mới tài khoản");
@@ -62,7 +56,6 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
 
-    @ApiOperation(value = "Thông tin tài khoản", response = ResponseEntity.class, authorizations = {@Authorization(value = "JWT")})
     @GetMapping(path = "/info")
     public ResponseEntity<?> getInfo() {
         ResponseObject<UserInfo> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
@@ -81,8 +74,19 @@ public class UserController {
                 .username(userDto.getUsername())
                 .role(role)
                 .avatar(userDto.getAvatar())
+                .name(userDto.getName())
                 .build();
         res.setData(userInfo);
+        return ResponseEntity.ok(res);
+    }
+
+    @PutMapping(path = "/update")
+    public ResponseEntity<?> register(@RequestBody UpdateUserReq req) {
+        log.info("Controller: cập nhật user");
+        UsernamePasswordAuthenticationToken user
+                = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDto userDto = this.userService.findByUsername(((CustomUserPrincipal) user.getPrincipal()).getUsername());
+        ResponseObject<UserDto> res = this.userService.updateUser(req, userDto);
         return ResponseEntity.ok(res);
     }
 
@@ -99,7 +103,6 @@ public class UserController {
 //    }
 
 
-    @ApiOperation(value = "Xác thực tài khoản người dùng", response = ResponseEntity.class)
     @GetMapping(path = "/verify")
     //@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> verify(@RequestParam("code") String verificationCode) {
@@ -113,7 +116,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/pages/miscellaneous/error")).build();
     }
 
-    @ApiOperation(value = "Lấy code rest password", response = ResponseEntity.class)
     @PostMapping("/reset_password_code/{email}")
     public ResponseEntity<?> getResetPasswordCode(@PathVariable String email) {
         log.info("Controller: Lấy code rest password");
@@ -121,7 +123,6 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
 
-    @ApiOperation(value = "Xác thực code rest password", response = ResponseEntity.class)
     @PostMapping("/reset")
     public ResponseEntity<?> verifyResetPassword(@RequestBody ResetPasswordReq req) {
         log.info("Controller: verify reset password");

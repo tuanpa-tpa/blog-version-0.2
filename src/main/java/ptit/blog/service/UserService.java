@@ -1,10 +1,7 @@
 package ptit.blog.service;
 
 import ptit.blog.dto.entity.UserDto;
-import ptit.blog.dto.request.user.ChangePasswordReq;
-import ptit.blog.dto.request.user.CreateReq;
-import ptit.blog.dto.request.user.ResetPasswordReq;
-import ptit.blog.dto.request.user.SearchUser;
+import ptit.blog.dto.request.user.*;
 import ptit.blog.dto.response.user.ResetPasswordResp;
 import ptit.blog.response.ResponseObject;
 import ptit.blog.response.ResponsePagination;
@@ -34,4 +31,6 @@ public interface UserService {
     ResponseObject<Boolean> delete(Long id);
 
     ResponseObject<UserDto> findUser(Long id);
+
+    ResponseObject<UserDto> updateUser(UpdateUserReq req, UserDto userDto);
 }

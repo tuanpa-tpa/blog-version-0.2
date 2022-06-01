@@ -60,6 +60,7 @@ public class JwtAuthenticationController {
                     .username(user.getUsername())
                     .email(user.getEmail())
                     .token(access_token)
+                    .name(user.getName())
                     .role(this.roleToArrayList(role))
                     .build();
             res.setData(userJwt);
@@ -78,9 +79,8 @@ public class JwtAuthenticationController {
         NullJwt nullJwt = NullJwt.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .isSetSubscriber(false)
-                .isStaff(true)
                 .token(access_token)
+                .name(user.getName())
                 .avatar("avatar-s-11.jpg")
                 .role(this.roleToArrayList(role))
                 .build();
@@ -106,6 +106,7 @@ private ArrayList<String> roleToArrayList(ArrayList<GrantedAuthority> role){
         private String username;
         private String email;
         private String token;
+        private String name;
         private ArrayList <String> role;
     }
 
@@ -119,9 +120,8 @@ private ArrayList<String> roleToArrayList(ArrayList<GrantedAuthority> role){
         private String email;
         private String token;
         private String avatar;
+        private String name;
         private ArrayList <String> role;
-        private Boolean isSetSubscriber;
-        private Boolean isStaff;
     }
 }
 

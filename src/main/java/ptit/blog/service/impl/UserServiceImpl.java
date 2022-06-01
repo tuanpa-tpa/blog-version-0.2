@@ -18,10 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ptit.blog.dto.EmailRegistrationDto;
 import ptit.blog.dto.Mapper;
 import ptit.blog.dto.entity.UserDto;
-import ptit.blog.dto.request.user.ChangePasswordReq;
-import ptit.blog.dto.request.user.CreateReq;
-import ptit.blog.dto.request.user.ResetPasswordReq;
-import ptit.blog.dto.request.user.SearchUser;
+import ptit.blog.dto.request.user.*;
 import ptit.blog.dto.response.user.CreateUserResp;
 import ptit.blog.dto.response.user.ResetPasswordResp;
 import ptit.blog.exception.user.UserBadReqException;
@@ -103,6 +100,7 @@ public class UserServiceImpl implements UserService {
             User user = this.userRepo.save(
                     User.builder()
                             .username(req.getUsername())
+                            .name(req.getName())
                             .password(passwordEncoder.encode(req.getPassword()))
                             .email(req.getEmail())
                             .createdAt(new Date())
@@ -347,6 +345,20 @@ public class UserServiceImpl implements UserService {
         ResponseObject<UserDto> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
         try {
             User user = userRepo.findById(id).orElseThrow(() -> new UserException("not found user"));
+            res.setData(Mapper.responseUserDtoFromModel(user));
+        } catch (Exception e) {
+            throw new UserException("not found user");
+        }
+        return res;
+    }
+
+    @Override
+    public ResponseObject<UserDto> updateUser(UpdateUserReq req, UserDto userDto) {
+        ResponseObject<UserDto> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
+        try {
+            User user = userRepo.findByUsername(userDto.getUsername());
+            user.setName(req.getName());
+            userRepo.save(user);
             res.setData(Mapper.responseUserDtoFromModel(user));
         } catch (Exception e) {
             throw new UserException("not found user");

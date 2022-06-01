@@ -22,7 +22,7 @@ public class WebMvcConfigurerConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        List<String> httpPatterns = new ArrayList<>(Arrays.asList("/staff/create-self", "/organization/create-self"));
+        List<String> httpPatterns = new ArrayList<>(Arrays.asList("/user/info/**"));
         registry.addInterceptor(loggerInterceptor);
         registry.addInterceptor(isSetSubcriberInterceptor).addPathPatterns(httpPatterns);
     }

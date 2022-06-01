@@ -20,4 +20,5 @@ public class CreateReq {
     private String email;
     @ApiModelProperty(value = "Role", name = "role", example = "USER", required = true)
     private String role;
+    private String name;
 }

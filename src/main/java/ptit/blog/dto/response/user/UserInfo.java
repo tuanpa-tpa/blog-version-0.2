@@ -21,5 +21,5 @@ public class UserInfo {
     private String username;
     private ArrayList<GrantedAuthority> role;
     private String avatar;
-
+    private String name;
 }
