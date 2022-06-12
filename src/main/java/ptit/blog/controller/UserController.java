@@ -63,9 +63,6 @@ public class UserController {
         UsernamePasswordAuthenticationToken user
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDto userDto = this.userService.findByUsername(((CustomUserPrincipal) user.getPrincipal()).getUsername());
-        /**
-         * Lấy thông tin của tài khoản, chia làm các trường hợp subscriber
-         */
         ArrayList<GrantedAuthority> role = new ArrayList<>(user.getAuthorities());
         role.removeIf(s -> !s.getAuthority().contains("ROLE_"));
 
@@ -81,7 +78,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/update")
-    public ResponseEntity<?> register(@RequestBody UpdateUserReq req) {
+    public ResponseEntity<?> update(@RequestBody UpdateUserReq req) {
         log.info("Controller: cập nhật user");
         UsernamePasswordAuthenticationToken user
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();

@@ -27,13 +27,7 @@ public class IsSetSubcriberInterceptor implements HandlerInterceptor {
         UsernamePasswordAuthenticationToken user
                 = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         User userFromDB = userRepo.findByUsername(((CustomUserPrincipal) user.getPrincipal()).getUsername());
-//        if (userFromDB.getSubscriberId() != null){
-//            log.info("it is true");
-//            throw new UserIsSetSubcriberException(userFromDB.getUsername());
-//        }else{
-            log.info("it is false");
             return true;
-//        }
     }
 
     @Override

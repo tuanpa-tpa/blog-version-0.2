@@ -49,7 +49,7 @@ server:
   error:
     include-message: always
     include-binding-errors: always
-  blogServer: http://localhost:8080
+  blogServer: localhost:8080
 template:
   email: classpath:/templates
 logging:

@@ -1,4 +1,4 @@
-package ptit.blog.controller;
+package ptit.blog.dto.response;
 
 public class ImageUploadResponse {
     private String message;

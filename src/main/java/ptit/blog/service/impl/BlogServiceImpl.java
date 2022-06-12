@@ -49,7 +49,6 @@ public class BlogServiceImpl implements BlogService {
     private final BlogRepo blogRepo;
     private final PaginationCustom paginationCustom;
     private final ImageRepository imageRepository;
-    private final Path root = Paths.get("C:\\Users\\pat\\Workspace\\PTIT\\Project\\blog-frontend\\src\\assets\\images\\slider");
 
     @Override
     public ResponseObject<List<BlogListDto>> getList() {
@@ -143,15 +142,17 @@ public class BlogServiceImpl implements BlogService {
     public ResponseObject<BlogDetailsResp> update(UpdateBlog req) {
         ResponseObject<BlogDetailsResp> res = new ResponseObject<>(true, ResponseStatus.DO_SERVICE_SUCCESSFUL);
         boolean check = false;
+
         Image img = null;
         try {
-
-            img = Image.builder()
-                    .name(req.getImg().getOriginalFilename())
-                    .type(req.getImg().getContentType())
-                    .image(ImageUtility.compressImage(req.getImg().getBytes())).build();
-            imageRepository.save(img);
-            check = true;
+            if (req.getImg() != null) {
+                img = Image.builder()
+                        .name(req.getImg().getOriginalFilename())
+                        .type(req.getImg().getContentType())
+                        .image(ImageUtility.compressImage(req.getImg().getBytes())).build();
+                imageRepository.save(img);
+                check = true;
+            }
         } catch (Exception e) {
             log.info(e.getMessage());
         }

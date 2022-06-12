@@ -22,7 +22,6 @@ public class JwtRequest {
     @NotNull(message = "email not empty")
     private String email;
 //    private String role;
-
     @Override
     public String toString() {
         return this.email + " : " + this.password;

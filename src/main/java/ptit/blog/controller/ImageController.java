@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:8082") open for specific port
 @CrossOrigin() // open for all ports
 @RequiredArgsConstructor
 @Slf4j
