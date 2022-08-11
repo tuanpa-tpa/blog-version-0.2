@@ -19,7 +19,6 @@ public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
         this.loggingService = loggingService;
         this.httpServletRequest = httpServletRequest;
     }
-
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         return true;

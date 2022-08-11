@@ -31,7 +31,6 @@ import java.util.ArrayList;
 @RestController
 @CrossOrigin
 @Slf4j
-@Api(tags = "IP")
 @RequiredArgsConstructor
 public class JwtAuthenticationController {
 

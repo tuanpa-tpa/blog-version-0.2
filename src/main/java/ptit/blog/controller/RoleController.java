@@ -25,7 +25,6 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping(path = "/role")
 @Slf4j
-@Api(tags = "IP")
 public class RoleController {
     private final UserService userService;
     private final RoleService roleService;

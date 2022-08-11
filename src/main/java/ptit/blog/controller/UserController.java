@@ -32,7 +32,6 @@ import java.util.List;
 @RequestMapping(path = "/user")
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "User")
 public class UserController {
     private final UserService userService;
     private final UserRepo userRepo;

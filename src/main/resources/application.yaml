@@ -15,7 +15,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/blogv2?createDatabaseIfNotExist=true&autoReconnect=true&userSSL=false&useUnicode=true&characterEncoding=utf-8
     username: root
-    password: tuan
+    password: tuanpa28
   jpa:
     hibernate:
       ddl-auto: update
@@ -63,6 +63,3 @@ logging:
           autoconfigure: INFO
       hibernate : ERROR
 debug: false
-#
-#file:
-#  upload-dir: C:\Users\pat\Workspace\PTIT\Project\blog-frontend\src\assets\images\banner

@@ -1,4 +1,4 @@
-create table if exists tbl_user
+create table  tbl_user
 (
     UserId              bigint auto_increment
         primary key,
